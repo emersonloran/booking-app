@@ -1,16 +1,54 @@
 import { create } from "zustand";
-import { Booking } from "../types/booking";
+import type { Booking } from "../types/booking";
+import { hasOverlap } from "../utils/date";
+import { v4 as uuid } from "uuid";
 
 interface BookingState {
   bookings: Booking[];
-  addBooking: (b: Booking) => void;
+  addBooking: (b: Omit<Booking, "id">) => void;
   updateBooking: (id: string, data: Partial<Booking>) => void;
   deleteBooking: (id: string) => void;
 }
 
-export const useBookingStore = create<BookingState>((set) => ({
+export const useBookingStore = create<BookingState>((set, get) => ({
   bookings: [],
-  addBooking: () => {},
-  updateBooking: () => {},
-  deleteBooking: () => {},
+
+  addBooking: (b) => {
+    const newBooking: Booking = { ...b, id: uuid() };
+    const existing = get().bookings;
+
+    if (hasOverlap(newBooking, existing)) {
+      throw new Error("Overlapping booking");
+    }
+
+    set({
+      bookings: [...existing, newBooking],
+    });
+  },
+
+  updateBooking: (id, data) => {
+    const existing = get().bookings;
+    const current = existing.find((b) => b.id === id);
+
+    if (!current) return;
+
+    const updatedBooking: Booking = {
+      ...current,
+      ...data,
+    };
+
+    if (hasOverlap(updatedBooking, existing, id)) {
+      throw new Error("Overlapping booking");
+    }
+
+    set({
+      bookings: existing.map((b) => (b.id === id ? updatedBooking : b)),
+    });
+  },
+
+  deleteBooking: (id) => {
+    set({
+      bookings: get().bookings.filter((b) => b.id !== id),
+    });
+  },
 }));

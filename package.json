@@ -30,6 +30,7 @@
     "@types/react-datepicker": "^6.2.0",
     "@types/react-dom": "^19.2.3",
     "@types/styled-components": "^5.1.36",
+    "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^5.1.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "cypress": "^15.11.0",
