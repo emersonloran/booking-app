@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useBookings } from "../../hooks/useBookings";
 import { FormContainer } from "./styles";
+import { useEffect } from "react";
 
 const bookingSchema = z.object({
   propertyId: z.string().min(1, "Select a property"),
@@ -21,7 +22,8 @@ const bookingSchema = z.object({
 type BookingFormData = z.infer<typeof bookingSchema>;
 
 export function BookingForm() {
-  const { addBooking } = useBookings();
+  const { addBooking, updateBooking, editingBooking, stopEditing } =
+    useBookings();
 
   const {
     register,
@@ -39,9 +41,28 @@ export function BookingForm() {
     },
   });
 
+  useEffect(() => {
+    if (editingBooking) {
+      reset({
+        propertyId: editingBooking.propertyId,
+        start: editingBooking.start,
+        end: editingBooking.end,
+        guestName: editingBooking.guestName,
+        price: editingBooking.price.toString(),
+      });
+    }
+  }, [editingBooking, reset]);
+
   const onSubmit = (data: BookingFormData) => {
     try {
-      addBooking(data);
+      if (editingBooking) {
+        console.log("Updating booking", editingBooking.id, data);
+        updateBooking(editingBooking.id, data);
+        stopEditing();
+      } else {
+        addBooking(data);
+      }
+
       reset();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
@@ -50,8 +71,11 @@ export function BookingForm() {
   };
 
   return (
-    <FormContainer onSubmit={handleSubmit(onSubmit)}>
-      <h2>Create Booking</h2>
+    <FormContainer
+      key={editingBooking?.id ?? "create"}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <h2>{editingBooking ? "Edit Booking" : "Create Booking"}</h2>
 
       <label>Property</label>
       <select {...register("propertyId")}>
@@ -70,14 +94,28 @@ export function BookingForm() {
       {errors.end && <span>{errors.end.message}</span>}
 
       <label>Guest Name</label>
-      <input type="text" placeholder="John Doe" {...register("guestName")} />
+      <input type="text" {...register("guestName")} />
       {errors.guestName && <span>{errors.guestName.message}</span>}
 
       <label>Price</label>
       <input type="number" step="0.01" {...register("price")} />
       {errors.price && <span>{errors.price.message}</span>}
 
-      <button type="submit">Create Booking</button>
+      <button type="submit">
+        {editingBooking ? "Save Changes" : "Create Booking"}
+      </button>
+
+      {editingBooking && (
+        <button
+          type="button"
+          onClick={() => {
+            stopEditing();
+            reset();
+          }}
+        >
+          Cancel Edit
+        </button>
+      )}
     </FormContainer>
   );
 }

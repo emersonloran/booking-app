@@ -8,6 +8,10 @@ interface BookingState {
   addBooking: (b: Omit<Booking, "id">) => void;
   updateBooking: (id: string, data: Partial<Booking>) => void;
   deleteBooking: (id: string) => void;
+
+  editingBooking: Booking | null;
+  startEditing: (booking: Booking) => void;
+  stopEditing: () => void;
 }
 
 export const useBookingStore = create<BookingState>((set, get) => ({
@@ -21,21 +25,15 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       throw new Error("Overlapping booking");
     }
 
-    set({
-      bookings: [...existing, newBooking],
-    });
+    set({ bookings: [...existing, newBooking] });
   },
 
   updateBooking: (id, data) => {
     const existing = get().bookings;
     const current = existing.find((b) => b.id === id);
-
     if (!current) return;
 
-    const updatedBooking: Booking = {
-      ...current,
-      ...data,
-    };
+    const updatedBooking: Booking = { ...current, ...data };
 
     if (hasOverlap(updatedBooking, existing, id)) {
       throw new Error("Overlapping booking");
@@ -51,4 +49,10 @@ export const useBookingStore = create<BookingState>((set, get) => ({
       bookings: get().bookings.filter((b) => b.id !== id),
     });
   },
+
+  editingBooking: null,
+
+  startEditing: (booking) => set({ editingBooking: booking }),
+
+  stopEditing: () => set({ editingBooking: null }),
 }));

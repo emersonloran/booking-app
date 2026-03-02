@@ -18,10 +18,12 @@ export const ListItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
 
   div {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
   }
 
   strong {
@@ -50,5 +52,20 @@ export const DeleteButton = styled.button`
 
   &:hover {
     background: #d93636;
+  }
+`;
+
+export const EditButton = styled.button`
+  background: #4d94ff;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    background: #1a75ff;
   }
 `;

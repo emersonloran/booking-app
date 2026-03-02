@@ -1,9 +1,9 @@
 import { useBookings } from "../../hooks/useBookings";
-import { ListContainer, ListItem, DeleteButton } from "./styles";
+import { ListContainer, ListItem, DeleteButton, EditButton } from "./styles";
 import { formatDate, formatPrice } from "../../utils/format";
 
 export function BookingList() {
-  const { bookings, deleteBooking } = useBookings();
+  const { bookings, deleteBooking, startEditing } = useBookings();
 
   if (bookings.length === 0) {
     return <p>No bookings yet.</p>;
@@ -25,7 +25,10 @@ export function BookingList() {
             <small>{b.propertyId}</small>
           </div>
 
-          <DeleteButton onClick={() => deleteBooking(b.id)}>✕</DeleteButton>
+          <div>
+            <EditButton onClick={() => startEditing(b)}>Edit</EditButton>
+            <DeleteButton onClick={() => deleteBooking(b.id)}>✕</DeleteButton>
+          </div>
         </ListItem>
       ))}
     </ListContainer>
