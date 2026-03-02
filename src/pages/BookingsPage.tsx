@@ -1,12 +1,13 @@
 import { BookingForm } from "../components/BookingForm/BookingForm";
 import { BookingList } from "../components/BookingList/BookingList";
+import { PageContainer, Title } from "./styles";
 
 export function BookingsPage() {
   return (
-    <div>
-      <h1>Bookings</h1>
+    <PageContainer>
+      <Title>Bookings</Title>
       <BookingForm />
       <BookingList />
-    </div>
+    </PageContainer>
   );
 }
