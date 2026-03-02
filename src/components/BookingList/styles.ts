@@ -5,6 +5,7 @@ export const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  max-width: 800px;
 `;
 
 export const ListItem = styled.div`

@@ -1,5 +1,6 @@
 import { useBookings } from "../../hooks/useBookings";
 import { ListContainer, ListItem, DeleteButton } from "./styles";
+import { formatDate, formatPrice } from "../../utils/format";
 
 export function BookingList() {
   const { bookings, deleteBooking } = useBookings();
@@ -15,12 +16,12 @@ export function BookingList() {
           <div>
             <strong>{b.guestName}</strong>
             <span>
-              {b.start} → {b.end}
+              {formatDate(b.start)} → {formatDate(b.end)}
             </span>
           </div>
 
           <div>
-            <span>${b.price.toFixed(2)}</span>
+            <span>{formatPrice(b.price)}</span>
             <small>{b.propertyId}</small>
           </div>
 
