@@ -1,8 +1,8 @@
 import { useBookings } from "../../hooks/useBookings";
-import { ListContainer, ListItem } from "./styles";
+import { ListContainer, ListItem, DeleteButton } from "./styles";
 
 export function BookingList() {
-  const { bookings } = useBookings();
+  const { bookings, deleteBooking } = useBookings();
 
   if (bookings.length === 0) {
     return <p>No bookings yet.</p>;
@@ -23,6 +23,8 @@ export function BookingList() {
             <span>${b.price.toFixed(2)}</span>
             <small>{b.propertyId}</small>
           </div>
+
+          <DeleteButton onClick={() => deleteBooking(b.id)}>✕</DeleteButton>
         </ListItem>
       ))}
     </ListContainer>

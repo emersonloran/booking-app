@@ -36,3 +36,18 @@ export const ListItem = styled.div`
     margin-top: 6px;
   }
 `;
+
+export const DeleteButton = styled.button`
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    background: #d93636;
+  }
+`;
