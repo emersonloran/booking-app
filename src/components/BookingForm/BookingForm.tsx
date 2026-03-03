@@ -1,3 +1,5 @@
+"use no memo";
+
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,17 +55,25 @@ export function BookingForm() {
     }
   }, [editingBooking, reset]);
 
+  const clearForm = () =>
+    reset({
+      propertyId: "",
+      start: "",
+      end: "",
+      guestName: "",
+      price: "",
+    });
+
   const onSubmit = (data: BookingFormData) => {
     try {
       if (editingBooking) {
-        console.log("Updating booking", editingBooking.id, data);
         updateBooking(editingBooking.id, data);
         stopEditing();
       } else {
         addBooking(data);
       }
 
-      reset();
+      clearForm();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
       alert(message);
@@ -71,10 +81,7 @@ export function BookingForm() {
   };
 
   return (
-    <FormContainer
-      key={editingBooking?.id ?? "create"}
-      onSubmit={handleSubmit(onSubmit)}
-    >
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <h2>{editingBooking ? "Edit Booking" : "Create Booking"}</h2>
 
       <label>Property</label>
@@ -110,7 +117,7 @@ export function BookingForm() {
           type="button"
           onClick={() => {
             stopEditing();
-            reset();
+            clearForm();
           }}
         >
           Cancel Edit
