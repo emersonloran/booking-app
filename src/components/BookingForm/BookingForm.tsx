@@ -5,7 +5,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useBookings } from "../../hooks/useBookings";
 import { FormContainer } from "./styles";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const bookingSchema = z.object({
   propertyId: z.string().min(1, "Select a property"),
@@ -26,6 +26,8 @@ type BookingFormData = z.infer<typeof bookingSchema>;
 export function BookingForm() {
   const { addBooking, updateBooking, editingBooking, stopEditing } =
     useBookings();
+
+  const [formError, setFormError] = useState<string | null>(null);
 
   const {
     register,
@@ -73,16 +75,19 @@ export function BookingForm() {
         addBooking(data);
       }
 
+      setFormError(null);
       clearForm();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Unknown error";
-      alert(message);
+      setFormError(message);
     }
   };
 
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <h2>{editingBooking ? "Edit Booking" : "Create Booking"}</h2>
+
+      {formError && <div className="error-box">{formError}</div>}
 
       <label>Property</label>
       <select {...register("propertyId")}>
@@ -118,6 +123,7 @@ export function BookingForm() {
           onClick={() => {
             stopEditing();
             clearForm();
+            setFormError(null);
           }}
         >
           Cancel Edit

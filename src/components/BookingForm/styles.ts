@@ -42,4 +42,15 @@ export const FormContainer = styled.form`
   @media (max-width: 480px) {
     max-width: 100%;
   }
+
+  .error-box {
+    background: #ffe6e6;
+    color: #b30000;
+    padding: 0.75rem 1rem;
+    border: 1px solid #ffcccc;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
 `;
