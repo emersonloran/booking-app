@@ -26,7 +26,7 @@ This project implements:
 
 **Clone the repository:**
 ```bash
-git clone [https://github.com/emersonloran/booking-app.git](https://github.com/emersonloran/booking-app.git)
+git clone https://github.com/emersonloran/booking-app.git
 cd booking-app
 ```
 
