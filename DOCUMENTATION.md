@@ -195,7 +195,105 @@ Pages Layer (BookingsPage.tsx)
 - Layout centered and responsive
 - No external UI libraries to keep project lightweight
 
-🧪 7. Testing Strategy (soon)
+🧪 7. Testing Strategy
+
+The project includes a complete automated test suite covering:
+
+✔ Unit Tests
+
+- Pure utility functions (date.ts, format.ts)
+- Business logic inside the Zustand store (bookings.ts)
+- Date overlap validation rules
+
+✔ Component Tests
+
+- Using React Testing Library, we test:
+- Form validation behavior
+- Booking creation flow
+- Editing flow
+- Error handling (overlapping bookings)
+- Clearing and cancelling editing
+- List rendering behavior
+- Interaction between UI and state layer
+
+✔ Integration Tests
+
+A minimal integration test ensures that the full page (BookingsPage) correctly renders and wires BookingForm + BookingList.
+
+📁 Test Structure
+src/
+├─ components/
+│ ├─ BookingForm/
+│ │ └─ BookingForm.test.tsx
+│ ├─ BookingList/
+│ │ └─ BookingList.test.tsx
+├─ store/
+│ └─ bookings.test.ts
+├─ utils/
+│ ├─ date.test.ts
+│ └─ format.test.ts
+└─ tests/
+└─ booking.test.tsx // bookings page integration test
+
+🧰 Technologies Used in Testing
+
+- Vitest — test runner and assertion library
+- @testing-library/react — DOM interaction tests
+- jsdom — browser-like testing environment
+- Zustand reset helpers — deterministic state resets for consistency
+
+⚙ Resetting Global State in Tests
+
+The Zustand store includes a dedicated internal method for deterministic tests:
+
+\_\_reset()
+
+Each test suite resets the store like this:
+
+beforeEach(() => {
+useBookingStore.getState().\_\_reset();
+});
+
+This ensures:
+
+- No state leaks across tests
+- Deterministic booking IDs
+- Consistent behavior in all test runs
+
+▶ Running the Test Suite
+
+To run all tests:
+
+npm run test
+
+Or with Vitest directly:
+
+npx vitest
+
+Run tests once (CI mode):
+
+npx vitest --run
+
+✔ Test Coverage Summary
+
+The test suite covers:
+
+🧠 Business Rules
+
+- Overlapping date detection
+- Immutable updates
+- Editing mode mechanics
+- Validation rules
+- Price transformation and parsing
+
+🖥 UI Behavior
+
+- Input validation messages
+- Error feedback UI
+- Form submission states
+- Interaction with edit/delete buttons
+
+The tests are intentionally high-fidelity and reflect realistic user behavior.
 
 🔚 8. Conclusion
 
