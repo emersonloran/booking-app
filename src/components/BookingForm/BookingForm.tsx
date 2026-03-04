@@ -89,28 +89,28 @@ export function BookingForm() {
 
       {formError && <div className="error-box">{formError}</div>}
 
-      <label>Property</label>
-      <select {...register("propertyId")}>
+      <label htmlFor="propertyId">Property</label>
+      <select id="propertyId" {...register("propertyId")}>
         <option value="">Select...</option>
         <option value="property-1">Property 1</option>
         <option value="property-2">Property 2</option>
       </select>
       {errors.propertyId && <span>{errors.propertyId.message}</span>}
 
-      <label>Start Date</label>
-      <input type="date" {...register("start")} />
+      <label htmlFor="start">Start Date</label>
+      <input id="start" type="date" {...register("start")} />
       {errors.start && <span>{errors.start.message}</span>}
 
-      <label>End Date</label>
-      <input type="date" {...register("end")} />
+      <label htmlFor="end">End Date</label>
+      <input id="end" type="date" {...register("end")} />
       {errors.end && <span>{errors.end.message}</span>}
 
-      <label>Guest Name</label>
-      <input type="text" {...register("guestName")} />
+      <label htmlFor="guestName">Guest Name</label>
+      <input id="guestName" type="text" {...register("guestName")} />
       {errors.guestName && <span>{errors.guestName.message}</span>}
 
-      <label>Price</label>
-      <input type="number" step="0.01" {...register("price")} />
+      <label htmlFor="price">Price</label>
+      <input id="price" type="number" step="0.01" {...register("price")} />
       {errors.price && <span>{errors.price.message}</span>}
 
       <button type="submit">

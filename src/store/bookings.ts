@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import type { Booking } from "../types/booking";
 import { hasOverlap } from "../utils/date";
-import { v4 as uuid } from "uuid";
 
 interface BookingState {
   bookings: Booking[];
@@ -12,47 +11,58 @@ interface BookingState {
   editingBooking: Booking | null;
   startEditing: (booking: Booking) => void;
   stopEditing: () => void;
+
+  __reset: () => void;
 }
 
-export const useBookingStore = create<BookingState>((set, get) => ({
-  bookings: [],
+export const useBookingStore = create<BookingState>((set, get) => {
+  let counter = 1;
 
-  addBooking: (b) => {
-    const newBooking: Booking = { ...b, id: uuid() };
-    const existing = get().bookings;
+  return {
+    bookings: [],
 
-    if (hasOverlap(newBooking, existing)) {
-      throw new Error("Overlapping booking");
-    }
+    addBooking: (b) => {
+      const newBooking: Booking = { ...b, id: `id-${counter++}` };
+      const existing = get().bookings;
 
-    set({ bookings: [...existing, newBooking] });
-  },
+      if (hasOverlap(newBooking, existing)) {
+        throw new Error("Overlapping booking");
+      }
 
-  updateBooking: (id, data) => {
-    const existing = get().bookings;
-    const current = existing.find((b) => b.id === id);
-    if (!current) return;
+      set({ bookings: [...existing, newBooking] });
+    },
 
-    const updatedBooking: Booking = { ...current, ...data };
+    updateBooking: (id, data) => {
+      const existing = get().bookings;
+      const current = existing.find((b) => b.id === id);
+      if (!current) return;
 
-    if (hasOverlap(updatedBooking, existing, id)) {
-      throw new Error("Overlapping booking");
-    }
+      const updated = { ...current, ...data };
 
-    set({
-      bookings: existing.map((b) => (b.id === id ? updatedBooking : b)),
-    });
-  },
+      if (hasOverlap(updated, existing, id)) {
+        throw new Error("Overlapping booking");
+      }
 
-  deleteBooking: (id) => {
-    set({
-      bookings: get().bookings.filter((b) => b.id !== id),
-    });
-  },
+      set({
+        bookings: existing.map((b) => (b.id === id ? updated : b)),
+      });
+    },
 
-  editingBooking: null,
+    deleteBooking: (id) => {
+      set({
+        bookings: get().bookings.filter((b) => b.id !== id),
+      });
+    },
 
-  startEditing: (booking) => set({ editingBooking: booking }),
+    editingBooking: null,
 
-  stopEditing: () => set({ editingBooking: null }),
-}));
+    startEditing: (booking) => set({ editingBooking: booking }),
+
+    stopEditing: () => set({ editingBooking: null }),
+
+    __reset: () => {
+      counter = 1;
+      set({ bookings: [], editingBooking: null });
+    },
+  };
+});
