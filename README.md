@@ -1,75 +1,168 @@
-# React + TypeScript + Vite
+Booking App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small booking management system built with React, Zustand, React Hook Form, and Zod, designed for technical evaluation and clean architecture demonstration.
 
-Currently, two official plugins are available:
+This project implements:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Creating bookings
+- Editing bookings
+- Deleting bookings
+- Preventing overlapping reservations
+- Form validation with typed schemas
+- Organized UI and modular components
+- Full automated test coverage
 
-## React Compiler
+🚀 Tech Stack
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- UI Components: React 18 + Styled Components
+- Forms & Validation: React Hook Form + Zod
+- State Management: Zustand
+- Date Utilities: date-fns
+- Testing: Vitest + React Testing Library
+- Build Tool: Vite
 
-Note: This will impact Vite dev & build performances.
+📦 Installation
 
-## Expanding the ESLint configuration
+Clone the repository:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+git clone <https://github.com/emersonloran/booking-app.git>
+cd booking-app
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Install dependencies:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+▶ Running the Application
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Start the development server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+npm run dev
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Vite will print a local URL such as:
+
+http://localhost:5173/
+
+🧪 Running Tests
+
+The test suite uses Vitest and includes:
+
+- Unit tests
+- Component tests
+- Integration tests
+
+Run all tests:
+
+npm run test
+
+Run once (CI mode):
+
+npx vitest --run
+
+🗂 Project Structure
+src/
+├─ components/
+│ ├─ BookingForm/
+│ ├─ BookingList/
+│
+├─ hooks/
+│ └─ useBookings.ts
+│
+├─ store/
+│ └─ bookings.ts
+│
+├─ utils/
+│ ├─ date.ts
+│ └─ format.ts
+│
+├─ pages/
+│ └─ BookingsPage.tsx
+│
+├─ types/
+│ └─ booking.ts
+│
+└─ App.tsx
+
+🧱 Architecture Overview
+
+The app follows a clean and modular architecture:
+
+1. Zustand Store
+
+Handles business rules and state:
+
+- bookings list
+- add/update/delete operations
+- editing state
+- date overlap validation
+
+2. React Hook Form + Zod
+
+The form is fully typed and validated before any state update.
+
+3. UI Components
+
+Isolated and focused:
+
+- BookingForm → handles creation/editing
+- BookingList → displays bookings and actions
+
+4. Utility Layer
+
+Pure functions:
+
+- formatDate
+- formatPrice
+- hasOverlap (date business rule)
+
+🧪 Testing Strategy
+
+This project includes a full automated test suite covering:
+
+- Business rules
+- Date overlap detection
+- Form behavior
+- UI rendering
+- Zustand state transitions
+- Integration of BookingForm + BookingList
+
+Each test suite resets the state using a built-in deterministic reset method.
+
+📝 Business Rules Summary
+
+✔ Property is required
+✔ Dates are required
+✔ Guest name required
+✔ Price must be numeric
+✔ A booking cannot overlap another booking on the same property
+✔ Editing a booking must load it into the form
+✔ Cancelling editing resets the form
+
+🧩 Example Booking Object
+{
+id: "id-1",
+propertyId: "property-1",
+start: "2024-01-10",
+end: "2024-01-12",
+guestName: "John Doe",
+price: 250
+}
+
+🧼 Code Quality & Conventions
+
+- All code is written in TypeScript
+- Strong typing at boundaries
+- No implicit any
+- State mutations are immutable
+- No side effects inside components
+- All store logic is pure and testable
+
+👨‍💻 Development Scripts
+Command Description
+npm run dev: Run development server
+npm run build: Create production build
+npm run preview: Preview production build
+npx vitest --run: Test in CI mode
+
+📬 Contact
+
+If you have any questions or want to discuss any design decisions, feel free to reach out.
